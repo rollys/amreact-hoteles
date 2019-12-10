@@ -14,7 +14,6 @@ import DetalleHotel from './views/detalle-hotel'
 import firebase from 'firebase/app'
 import firebaseConfig from './constants/firebase-config'
 
-let db = {}
 class App extends Component {
   constructor() {
     super()
