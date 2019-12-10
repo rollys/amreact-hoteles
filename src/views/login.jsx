@@ -4,6 +4,7 @@ import 'firebase/auth'
 import Titulo from '../components/titulo'
 import Error from '../components/error'
 import { ADMIN as ROUTEADMIN } from '../constants/routes'
+import { DATA_USER } from '../constants/tables'
 
 const INIT_STATE = {
   hasError: false,
@@ -50,7 +51,7 @@ class Login extends Component {
   }
 
   setUserData = data => {
-    localStorage.setItem('user', JSON.stringify(data))
+    localStorage.setItem(DATA_USER, JSON.stringify(data))
   }
 
   render() {
@@ -61,18 +62,18 @@ class Login extends Component {
         <form onSubmit={this.handleSubmit}>
           <Error {...this.state} />
           <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Correo</label>
+            <label htmlFor="email">Correo</label>
             <input
               type="email"
               className="form-control"
-              name="correo"
+              name="email"
               ref={input => {
                 this.inputEmail = input
               }}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Contrasenia</label>
+            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
               className="form-control"

@@ -4,7 +4,7 @@ import AdminLayout from '../layout/admin'
 class ListadoHotel extends Component {
   render() {
     return (
-      <AdminLayout>
+      <AdminLayout {...this.props}>
         <div className="text-center m-4">
           <h1 className="d-inline-block">
             <span className="badge badge-secondary">LISTADO DE HOTELES</span>
