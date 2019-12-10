@@ -1,25 +1,86 @@
 import React, { Component } from 'react'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import Titulo from '../components/titulo'
+import Error from '../components/error'
+import { ADMIN as ROUTEADMIN } from '../constants/routes'
 
+const INIT_STATE = {
+  hasError: false,
+  msgError: '',
+}
 class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = INIT_STATE
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextState.hasError !== this.state.hasError ||
+      nextState.msgError !== this.state.msgError
+    )
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(
+        this.inputEmail.value,
+        this.inputPassword.value
+      )
+      .then(r => {
+        this.setState(INIT_STATE)
+        this.setUserData({
+          displayName: r.user.displayName,
+          email: r.user.email,
+        })
+        this.props.history.push(ROUTEADMIN)
+      })
+      .catch(error => {
+        // Handle Errors here.
+        // const errorCode = error.code
+        const errorMessage = error.message
+        this.setState({
+          hasError: true,
+          msgError: errorMessage,
+        })
+      })
+  }
+
+  setUserData = data => {
+    localStorage.setItem('user', JSON.stringify(data))
+  }
+
   render() {
+    console.log('---> render')
     return (
       <div className="container card w-25 mt-5 p-2">
-        <h1 className='text-center'>
-          <span class="badge badge-secondary">INICIO DE SESIÓN</span>
-        </h1>
-        <form>
+        <Titulo title="INICIO DE SESIÓN" />
+        <form onSubmit={this.handleSubmit}>
+          <Error {...this.state} />
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Correo</label>
             <input
               type="email"
               className="form-control"
               name="correo"
-              aria-describedby="emailHelp"
+              ref={input => {
+                this.inputEmail = input
+              }}
             />
           </div>
           <div className="form-group">
             <label htmlFor="exampleInputPassword1">Contrasenia</label>
-            <input type="password" className="form-control" name="password" />
+            <input
+              type="password"
+              className="form-control"
+              name="password"
+              ref={input => {
+                this.inputPassword = input
+              }}
+            />
           </div>
           <div className="text-center">
             <button type="submit" className="btn btn-primary">
