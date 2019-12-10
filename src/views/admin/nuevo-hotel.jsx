@@ -6,6 +6,7 @@ import Error from '../../components/error'
 import { ADMIN as ROUTEADMIN } from '../../constants/routes'
 import { cities } from '../../constants/cities'
 import { TABLE_HOTELS } from '../../constants/tables'
+import AdminLayout from '../layout/admin'
 
 class NuevoHotel extends PureComponent {
   constructor(props) {
@@ -77,100 +78,78 @@ class NuevoHotel extends PureComponent {
   render() {
     console.log('---> render')
     return (
-      <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href="#">
-            HOTELES
-          </a>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <div className="navbar-nav mr-auto"></div>
-            <form className="form-inline my-2 my-lg-0">
-              <span className="mr-3">Administrador</span>
-              <button
-                className="btn btn-outline-success my-2 my-sm-0"
-                type="submit">
-                Cerrar sesión
-              </button>
-            </form>
-          </div>
-        </nav>
-
-        <div className="container w-50 card mt-3">
-          <Titulo title="NUEVO HOTEL" />
-          <form>
-            <Error
-              hasError={this.state.hasError}
-              msgError="Llene todo los campos!!!"
+      <AdminLayout>
+        <Titulo title="NUEVO HOTEL" />
+        <form>
+          <Error
+            hasError={this.state.hasError}
+            msgError="Llene todo los campos!!!"
+          />
+          <div className="form-group">
+            <label htmlFor="name">Nombre</label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              ref={this.inputName}
             />
-            <div className="form-group">
-              <label htmlFor="name">Nombre</label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                ref={this.inputName}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="price">Precio (S/)</label>
-              <input
-                type="number"
-                className="form-control"
-                name="price"
-                ref={this.inputPrice}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="city">Ciudad</label>
-              <select
-                className="form-control"
-                name="city"
-                ref={this.selectCity}>
-                <option value="">- Seleccione ciudad -</option>
-                {cities.map(city => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="address">Dirección</label>
-              <input
-                type="text"
-                className="form-control"
-                name="address"
-                ref={this.inputAddress}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="description">Descripción</label>
-              <textarea
-                className="form-control"
-                name="description"
-                rows="3"
-                ref={this.textareaDescription}></textarea>
-            </div>
-            <div className="form-group">
-              <label htmlFor="url_image">Url de Imagen</label>
-              <input
-                type="text"
-                className="form-control"
-                name="url_image"
-                ref={this.inputUrlImage}
-              />
-            </div>
-            <div className="form-group text-center">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.handleClick}>
-                Guardar
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="price">Precio (S/)</label>
+            <input
+              type="number"
+              className="form-control"
+              name="price"
+              ref={this.inputPrice}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">Ciudad</label>
+            <select className="form-control" name="city" ref={this.selectCity}>
+              <option value="">- Seleccione ciudad -</option>
+              {cities.map(city => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="address">Dirección</label>
+            <input
+              type="text"
+              className="form-control"
+              name="address"
+              ref={this.inputAddress}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Descripción</label>
+            <textarea
+              className="form-control"
+              name="description"
+              rows="3"
+              ref={this.textareaDescription}></textarea>
+          </div>
+          <div className="form-group">
+            <label htmlFor="url_image">Url de Imagen</label>
+            <input
+              type="text"
+              className="form-control"
+              name="url_image"
+              ref={this.inputUrlImage}
+            />
+          </div>
+          <div className="form-group text-center">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.handleClick}>
+              Guardar
+            </button>
+          </div>
+        </form>
+      </AdminLayout>
     )
   }
 }
