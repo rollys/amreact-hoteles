@@ -30,6 +30,26 @@ class App extends Component {
           <Route path="/admin/hotel/new" component={NuevoHotel} />
           <Route path="/admin/hotel/update/:id" component={ActualizarHotel} />
           <Route path="/hotel/:id" component={DetalleHotel} />
+          <Route
+            path="/register"
+            render={() => {
+              const email = 'admin@hoteles.com'
+              const password = '123456'
+              const displayName = 'Administrador'
+              firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(result => {
+                  return result.user.updateProfile({
+                    displayName,
+                  })
+                })
+                .catch(error => {
+                  console.log(error)
+                })
+              return <div>Registrando administrador</div>
+            }}
+          />
         </Switch>
       </Router>
     )
