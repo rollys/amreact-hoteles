@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-
-//Vista admin
+// Vista admin
 import Login from './views/login'
 import ListadoHotel from './views/admin/listado-hotel'
 import NuevoHotel from './views/admin/nuevo-hotel'
 import ActualizarHotel from './views/admin/actualizar-hotel'
-//Vista usuario final
+// Vista usuario final
 import Buscador from './views/buscador'
 import DetalleHotel from './views/detalle-hotel'
-//Firebase
+// Firebase
 // import firebase from 'firebase' // importa todo los paquetes
 import firebase from 'firebase/app'
 import firebaseConfig from './constants/firebase-config'
+// Importando Rutas
+import * as Ruta from './constants/routes'
 
 class App extends Component {
   constructor() {
@@ -24,12 +25,12 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={Buscador} />
-          <Route path="/login" component={Login} />
-          <Route exact path="/admin" component={ListadoHotel} />
-          <Route path="/admin/hotel/new" component={NuevoHotel} />
-          <Route path="/admin/hotel/update/:id" component={ActualizarHotel} />
-          <Route path="/hotel/:id" component={DetalleHotel} />
+          <Route exact path={Ruta.HOME} component={Buscador} />
+          <Route path={Ruta.LOGIN} component={Login} />
+          <Route exact path={Ruta.ADMIN} component={ListadoHotel} />
+          <Route path={Ruta.ADMIN_HOTEL_NEW} component={NuevoHotel} />
+          <Route path={Ruta.ADMIN_HOTEL_UPDATE()} component={ActualizarHotel} />
+          <Route path={Ruta.DETAIL_HOTEL()} component={DetalleHotel} />
           <Route
             path="/register"
             render={() => {
