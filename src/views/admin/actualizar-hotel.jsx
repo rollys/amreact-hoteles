@@ -1,54 +1,65 @@
 import React, { Component } from 'react'
 import AdminLayout from '../layout/admin'
+import Titulo from '../../components/titulo'
+import Formulario from '../../components/formulario'
+import { ADMIN as ROUTEADMIN } from '../../constants/routes'
+import { TABLE_HOTELS } from '../../constants/tables'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
 
 class ActualizarHotel extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      hotel: {},
+    }
+    this.db = firebase.firestore()
+    this.getHotelBydId(this.props.match.params.id)
+  }
+
+  getHotelBydId = id => {
+    // this.db.collection(TABLE_HOTELS).where('name', '==', 'Los Delfines')
+    this.db
+      .collection(TABLE_HOTELS)
+      .doc(id)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          console.log('Datos del hotel:', doc.data())
+          this.setState({
+            hotel: doc.data(),
+          })
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('Hotel no encontrado!')
+          this.props.history.push(ROUTEADMIN)
+        }
+      })
+      .catch(error => {
+        console.log('Error getting document:', error)
+      })
+  }
+
+  updateHotel = ({ id, hotel }) => {
+    this.db
+      .collection(TABLE_HOTELS)
+      .doc(this.props.match.params.id)
+      .update(hotel)
+      .then(docRef => {
+        this.props.history.push(ROUTEADMIN)
+      })
+      .catch(error => {
+        console.error('Error update document: ', error)
+      })
+
+    console.log(hotel)
+  }
   render() {
+    console.log('333', this.state.hotel)
     return (
-      <AdminLayout>
-        <h1 className="text-center mt-2">
-          <span className="badge badge-secondary">ACTUALIZAR HOTEL</span>
-        </h1>
-        <form>
-          <div class="form-group">
-            <label for="exampleFormControlInput1">Nombre</label>
-            <input type="text" class="form-control" name="name" />
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlInput1">Precio (S/)</label>
-            <input type="text" class="form-control" name="price" />
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlSelect1">Ciudad</label>
-            <select class="form-control" name="city">
-              <option value="">- Seleccione ciudad -</option>
-              <option value="Lima">Lima</option>
-              <option value="Cusco">Cusco</option>
-              <option value="Arequipa">Arequipa</option>
-              <option value="Ayacucho">Ayacucho</option>
-              <option value="Ica">Ica</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlInput1">Dirección</label>
-            <input type="text" class="form-control" name="address" />
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Descripción</label>
-            <textarea
-              class="form-control"
-              name="description"
-              rows="3"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="exampleFormControlInput1">Url de Imagen</label>
-            <input type="text" class="form-control" name="url_image" />
-          </div>
-          <div class="form-group text-center">
-            <button type="button" class="btn btn-primary">
-              Guardar
-            </button>
-          </div>
-        </form>
+      <AdminLayout {...this.props}>
+        <Titulo title="ACTUALIZAR HOTEL" />
+        <Formulario callback={this.updateHotel} hotel={this.state.hotel} />
       </AdminLayout>
     )
   }
