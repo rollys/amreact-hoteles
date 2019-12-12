@@ -16,12 +16,12 @@ class ListadoHotel extends Component {
     this.state = {
       data: [],
     }
+    this.db = firebase.firestore()
     this.listCollections()
   }
 
   listCollections = () => {
-    firebase
-      .firestore()
+    this.db
       .collection(TABLE_HOTELS)
       .get()
       .then(data => {
@@ -32,6 +32,29 @@ class ListadoHotel extends Component {
         this.setState({ data: newData })
       })
   }
+
+  deleteHotel = id => {
+    this.db
+      .collection(TABLE_HOTELS)
+      .doc(id)
+      .delete()
+      .then(r => {
+        this.listCollections()
+      })
+      .catch(error => {
+        console.error('Error adding document: ', error)
+      })
+  }
+
+  onClickDelete = id => {
+    return e => {
+      if (window.confirm(`Estas seguro de eliminar el Hotel?`)) {
+        this.deleteHotel(id)
+        console.log('ok')
+      }
+    }
+  }
+
   render() {
     const { data } = this.state
     console.log('data2', data)
@@ -74,11 +97,11 @@ class ListadoHotel extends Component {
                         to={ADMIN_HOTEL_UPDATE(item.id)}>
                         Editar
                       </Link>
-                      <Link
-                        className="btn btn-danger ml-3"
-                        to={ADMIN_HOTEL_DELETE(item.id)}>
+                      <button
+                        onClick={this.onClickDelete(item.id)}
+                        className="btn btn-danger ml-3">
                         Eliminar
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 )
