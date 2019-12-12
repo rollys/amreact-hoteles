@@ -17,6 +17,10 @@ class ActualizarHotel extends Component {
     this.getHotelBydId(this.props.match.params.id)
   }
 
+  /* componentDidMount() {
+    this.getHotelBydId(this.props.match.params.id)
+  } */
+
   getHotelBydId = id => {
     // this.db.collection(TABLE_HOTELS).where('name', '==', 'Los Delfines')
     this.db
@@ -40,7 +44,7 @@ class ActualizarHotel extends Component {
       })
   }
 
-  updateHotel = ({ id, hotel }) => {
+  updateHotel = ({ hotel }) => {
     this.db
       .collection(TABLE_HOTELS)
       .doc(this.props.match.params.id)
@@ -51,11 +55,8 @@ class ActualizarHotel extends Component {
       .catch(error => {
         console.error('Error update document: ', error)
       })
-
-    console.log(hotel)
   }
   render() {
-    console.log('333', this.state.hotel)
     return (
       <AdminLayout {...this.props}>
         <Titulo title="ACTUALIZAR HOTEL" />

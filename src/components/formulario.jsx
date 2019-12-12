@@ -7,7 +7,14 @@ class Formulario extends Component {
     super(props)
     this.state = {
       hasError: false,
-      hotel: this.props.hotel,
+      hotel: {
+        name: '',
+        price: '',
+        city: '',
+        address: '',
+        description: '',
+        url_image: '',
+      },
     }
     this.inputName = React.createRef()
     this.inputPrice = React.createRef()
@@ -51,20 +58,27 @@ class Formulario extends Component {
     }
   }
 
-  componentDidMount() {
-    //this.setState({ hotel: this.props.hotel })
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.setState({ hotel: nextProps.hotel })
   }
 
-  componentWillReceiveProps() {
-    console.log('---> componentWillReceiveProps')
-    console.log('vvvv', this.props.hotel)
-    this.setState({ hotel: this.props.hotel })
+  onChange(fieldName) {
+    return event => {
+      this.setState({
+        hotel: { ...this.state.hotel, [fieldName]: event.target.value },
+      })
+    }
   }
 
   render() {
-    const { name, price, city: cityHotel, address, description, url_image } =
-      this.state.hotel || {}
-    console.log('aa', this.state.hotel)
+    const {
+      name,
+      price,
+      city: cityHotel,
+      address,
+      description,
+      url_image,
+    } = this.state.hotel
     return (
       <form>
         <Error
@@ -79,6 +93,7 @@ class Formulario extends Component {
             name="name"
             ref={this.inputName}
             value={name}
+            onChange={this.onChange('name')}
           />
         </div>
         <div className="form-group">
