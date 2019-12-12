@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {
   ADMIN as ROUTEADMIN,
   LOGIN as ROUTELOGIN,
@@ -35,9 +36,9 @@ class AdminLayout extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand" href={ROUTEADMIN}>
+          <Link className="navbar-brand" to={ROUTEADMIN}>
             HOTELES
-          </a>
+          </Link>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <div className="navbar-nav mr-auto"></div>
             <div className="form-inline my-2 my-lg-0">

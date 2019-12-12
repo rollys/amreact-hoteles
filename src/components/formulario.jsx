@@ -104,11 +104,12 @@ class Formulario extends Component {
             name="price"
             ref={this.inputPrice}
             value={price}
+            onChange={this.onChange('price')}
           />
         </div>
         <div className="form-group">
           <label htmlFor="city">Ciudad</label>
-          <select className="form-control" name="city" ref={this.selectCity}>
+          <select className="form-control" name="city" ref={this.selectCity} onChange={this.onChange('city')} >
             <option value="">- Seleccione ciudad -</option>
             {cities.map(city => (
               <option key={city} value={city} selected={city === cityHotel}>
@@ -125,6 +126,7 @@ class Formulario extends Component {
             name="address"
             ref={this.inputAddress}
             value={address}
+            onChange={this.onChange('address')}
           />
         </div>
         <div className="form-group">
@@ -134,7 +136,9 @@ class Formulario extends Component {
             name="description"
             rows="3"
             ref={this.textareaDescription}
-            value={description}></textarea>
+            value={description}
+            onChange={this.onChange('description')}
+            ></textarea>
         </div>
         <div className="form-group">
           <label htmlFor="url_image">Url de Imagen</label>
@@ -144,6 +148,7 @@ class Formulario extends Component {
             name="url_image"
             ref={this.inputUrlImage}
             value={url_image}
+            onChange={this.onChange('url_image')}
           />
         </div>
         <div className="form-group text-center">
