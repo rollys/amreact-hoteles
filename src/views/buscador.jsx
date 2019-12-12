@@ -1,56 +1,120 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import FrontLayout from './layout/front'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import { TABLE_HOTELS } from '../constants/tables'
+import { DETAIL_HOTEL as ROUTESDETAILHOTEL } from '../constants/routes'
 
 class Buscador extends Component {
+  constructor() {
+    super()
+    this.state = {
+      data: [],
+    }
+    this.db = firebase.firestore()
+    this.listCollections()
+    this.inputSearch = React.createRef()
+  }
+
+  listCollections = () => {
+    this.db
+      .collection(TABLE_HOTELS)
+      .get()
+      .then(data => {
+        const newData = []
+        data.forEach(doc => {
+          newData.push({ ...doc.data(), id: doc.id })
+        })
+        this.setState({ data: newData })
+      })
+  }
+
+  listCollectionsSearch = key => {
+    this.db
+      .collection(TABLE_HOTELS)
+      .get()
+      .then(data => {
+        const newData = []
+        data.forEach(doc => {
+          if (doc.data().name === key) {
+            newData.push({ ...doc.data(), id: doc.id })
+          }
+        })
+        this.setState({ data: newData })
+      })
+  }
+
+  search = () => {
+    const key = this.inputSearch.current.value
+    if (key === '') {
+      this.listCollections()
+    } else {
+      this.listCollectionsSearch(key)
+    }
+  }
+
   render() {
     return (
       <FrontLayout>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="search" />
-          <div class="input-group-append">
+        <div className="input-group mb-3">
+          <input
+            type="text"
+            className="form-control"
+            name="search"
+            ref={this.inputSearch}
+          />
+          <div className="input-group-append">
             <button
-              class="btn btn-outline-secondary"
+              className="btn btn-outline-secondary"
               type="button"
-              name="btn-search">
+              name="btn-search"
+              onClick={this.search}>
               Buscar
             </button>
           </div>
         </div>
         <div className="card-deck justify-content-center">
-          {[1, 2, 3, 4, 5, 6].map(item => {
+          {this.state.data.map(item => {
             return (
               <div
-                class="card"
+                key={item.id}
+                className="card"
                 style={{
                   minWidth: '18rem',
                   maxWidth: '18rem',
                   marginBottom: 10,
                 }}>
                 <img
-                  src="https://fakeimg.pl/250x100/"
-                  class="card-img-top"
-                  alt="..."
+                  src={item.url_image}
+                  className="card-img-top"
+                  alt={item.name}
+                  width="250"
+                  height="100"
                 />
-                <div class="card-header text-center">
-                  <strong>Hotel Los Delfines</strong>
+                <div className="card-header text-center">
+                  <strong>{item.name}</strong>
                 </div>
-                <div class="card-body">
-                  <ul class="list-group">
-                    <li class="list-group-item list-group-item-success">
-                      <strong>Ciudad:</strong> Lima
+                <div className="card-body">
+                  <ul className="list-group">
+                    <li className="list-group-item list-group-item-success">
+                      <strong>Ciudad:</strong> {item.city}
                     </li>
-                    <li class="list-group-item list-group-item-warning">
-                      <strong>Dirección:</strong> Av. Juan de Aliaga
+                    <li className="list-group-item list-group-item-warning">
+                      <strong>Dirección:</strong> {item.address}
                     </li>
-                    <li class="list-group-item list-group-item-info">
-                      <strong>Precio:</strong> S/ 350
+                    <li className="list-group-item list-group-item-info">
+                      <strong>Precio:</strong> S/ {item.price}
                     </li>
                   </ul>
                 </div>
-                <div class="card-footer text-center">
-                  <button type="button" class="btn btn-success">
+                <div className="card-footer text-center">
+                  <Link
+                    type="button"
+                    className="btn btn-success"
+                    to={ROUTESDETAILHOTEL(item.id)}>
                     Ver
-                  </button>
+                  </Link>
                 </div>
               </div>
             )

@@ -4,11 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { TABLE_HOTELS } from '../../constants/tables'
 import { Link } from 'react-router-dom'
-import {
-  ADMIN_HOTEL_NEW,
-  ADMIN_HOTEL_UPDATE,
-  ADMIN_HOTEL_DELETE,
-} from '../../constants/routes'
+import { ADMIN_HOTEL_NEW, ADMIN_HOTEL_UPDATE } from '../../constants/routes'
 
 class ListadoHotel extends Component {
   constructor() {
