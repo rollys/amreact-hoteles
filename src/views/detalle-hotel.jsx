@@ -1,38 +1,61 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import FrontLayout from './layout/front'
+import { TABLE_HOTELS } from '../constants/tables'
+import { HOME as ROUTESHOME } from '../constants/routes'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
 
 class DetalleHotel extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      hotel: {},
+    }
+    this.db = firebase.firestore()
+    this.getHotelBydId(this.props.match.params.id)
+  }
+
+  getHotelBydId = id => {
+    this.db
+      .collection(TABLE_HOTELS)
+      .doc(id)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          console.log('Datos del hotel:', doc.data())
+          this.setState({
+            hotel: doc.data(),
+          })
+        } else {
+          // doc.data() will be undefined in this case
+          console.log('Hotel no encontrado!')
+          this.props.history.push(ROUTESHOME)
+        }
+      })
+      .catch(error => {
+        console.log('Error getting document:', error)
+      })
+  }
+
   render() {
+    const { name, price, description, city, url_image, address } = this.state.hotel
     return (
       <FrontLayout className="jumbotron container w-75">
-        <img src="https://fakeimg.pl/500x250/" class="card-img-top" alt="..." />
-        <div class="card text-center">
-          <div class="card-header">
-            <strong>Hotel Los Delfines</strong>
+        <img src={url_image} className="card-img-top" alt="..." />
+        <div className="card text-center">
+          <div className="card-header">
+            <strong>{name}</strong>
           </div>
-          <div class="card-body">
-            <h5 class="card-title">
-              <strong>Ciudad:</strong> Lima , <strong>Dirección:</strong> Av.
-              Juan de Aliaga , <strong>Precio:</strong> S/ 350
+          <div className="card-body">
+            <h5 className="card-title">
+              <strong>Ciudad:</strong> {city}, <strong>Dirección:</strong>{' '}
+              {address}, <strong>Precio:</strong> S/ {price}
             </h5>
-            <p class="card-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-              non mi vel tortor efficitur scelerisque at non ex. Donec eget
-              fringilla ex. Quisque neque nulla, sodales quis purus sit amet,
-              varius bibendum augue. Ut ut lacus eleifend, finibus velit sit
-              amet, gravida lorem. Etiam lobortis consequat turpis facilisis
-              blandit. Maecenas ullamcorper nibh sit amet sapien eleifend
-              interdum. Pellentesque nisi turpis, iaculis consectetur imperdiet
-              vestibulum, molestie sit amet arcu. Morbi ultrices imperdiet
-              faucibus. Aliquam ac dictum nisl, volutpat auctor sem. Praesent
-              molestie maximus neque, et euismod elit condimentum vitae.
-              Pellentesque id nisl mi. Duis augue lorem, feugiat eu tincidunt
-              quis, accumsan vel lacus. Praesent tortor sem, rhoncus eu quam a,
-              euismod interdum tortor.
-            </p>
-            <a href="/" class="btn btn-primary">
+            <p className="card-text">{description}</p>
+            <Link to="/" className="btn btn-primary">
               Regresar al buscador
-            </a>
+            </Link>
           </div>
         </div>
       </FrontLayout>

@@ -8,6 +8,8 @@ import ActualizarHotel from './views/admin/actualizar-hotel'
 // Vista usuario final
 import Buscador from './views/buscador'
 import DetalleHotel from './views/detalle-hotel'
+// NotFound
+import NotFound from './views/not-found'
 // Firebase
 // import firebase from 'firebase' // importa todo los paquetes
 import firebase from 'firebase/app'
@@ -51,6 +53,7 @@ class App extends Component {
               return <div>Registrando administrador</div>
             }}
           />
+          <Route  component={NotFound} />
         </Switch>
       </Router>
     )
