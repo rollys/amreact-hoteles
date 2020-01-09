@@ -1,18 +1,21 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import Titulo from '../components/titulo'
 import Error from '../components/error'
 import { ADMIN as ROUTEADMIN } from '../constants/routes'
 import { DATA_USER } from '../constants/tables'
+import UserContext from '../contexts/user'
 
 const INIT_STATE = {
   hasError: false,
   msgError: '',
 }
 const Login = props => {
-
   const [dataError, setDataError] = useState(INIT_STATE)
+  const loginContext = useContext(UserContext)
+  const { setUser } = loginContext
+  console.log(loginContext)
 
   const inputEmail = useRef()
   const inputPassword = useRef()
@@ -45,7 +48,8 @@ const Login = props => {
   }
 
   const setUserData = data => {
-    localStorage.setItem(DATA_USER, JSON.stringify(data))
+    // localStorage.setItem(DATA_USER, JSON.stringify(data))
+    setUser(data)
   }
 
   return (

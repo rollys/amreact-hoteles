@@ -16,46 +16,65 @@ import firebase from 'firebase/app'
 import firebaseConfig from './constants/firebase-config'
 // Importando Rutas
 import * as Ruta from './constants/routes'
+import { UserProvider } from './contexts/user'
 
 class App extends Component {
   constructor() {
     super()
+    this.state = {
+      user: {},
+    }
     firebase.initializeApp(firebaseConfig)
+  }
+
+  setUser = data => {
+    this.setState({
+      user: data,
+    })
   }
 
   render() {
     return (
-      <Router>
-        <Switch>
-          <Route exact path={Ruta.HOME} component={Buscador} />
-          <Route path={Ruta.LOGIN} component={Login} />
-          <Route exact path={Ruta.ADMIN} component={ListadoHotel} />
-          <Route path={Ruta.ADMIN_HOTEL_NEW} component={NuevoHotel} />
-          <Route path={Ruta.ADMIN_HOTEL_UPDATE()} component={ActualizarHotel} />
-          <Route path={Ruta.DETAIL_HOTEL()} component={DetalleHotel} />
-          <Route
-            path="/register"
-            render={() => {
-              const email = 'admin@hoteles.com'
-              const password = '123456'
-              const displayName = 'Administrador'
-              firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password)
-                .then(result => {
-                  return result.user.updateProfile({
-                    displayName,
+      <UserProvider
+        value={{
+          user: this.state.user,
+          setUser: this.setUser,
+        }}>
+        <Router>
+          <Switch>
+            <Route exact path={Ruta.HOME} component={Buscador} />
+            <Route path={Ruta.LOGIN} component={Login} />
+            <Route exact path={Ruta.ADMIN} component={ListadoHotel} />
+            <Route path={Ruta.ADMIN_HOTEL_NEW} component={NuevoHotel} />
+            <Route
+              path={Ruta.ADMIN_HOTEL_UPDATE()}
+              component={ActualizarHotel}
+            />
+            <Route path={Ruta.DETAIL_HOTEL()} component={DetalleHotel} />
+            <Route
+              path="/register"
+              render={() => {
+                const email = 'admin@hoteles.com'
+                const password = '123456'
+                const displayName = 'Administrador'
+                firebase
+                  .auth()
+                  .createUserWithEmailAndPassword(email, password)
+                  .then(result => {
+                    return result.user.updateProfile({
+                      displayName,
+                    })
                   })
-                })
-                .catch(error => {
-                  console.log(error)
-                })
-              return <div>Registrando administrador</div>
-            }}
-          />
-          <Route  component={NotFound} />
-        </Switch>
-      </Router>
+                  .catch(error => {
+                    console.log(error)
+                  })
+                return <div>Registrando administrador</div>
+              }}
+            />
+            <Route component={NotFound} />
+          </Switch>
+        </Router>
+      </UserProvider>
     )
   }
 }

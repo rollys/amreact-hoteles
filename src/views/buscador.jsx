@@ -7,10 +7,6 @@ import { TABLE_HOTELS } from '../constants/tables'
 import { DETAIL_HOTEL as ROUTESDETAILHOTEL } from '../constants/routes'
 
 const Buscador = props => {
-  /* constructor() {
-    this.listCollections()
-  } */
-
   const db = firebase.firestore()
   const [data, setData] = useState([])
   const inputSearch = useRef()
@@ -43,7 +39,6 @@ const Buscador = props => {
   }
 
   const search = () => {
- 
     const key = inputSearch.current.value
     console.log(key)
     if (key === '') {
@@ -53,9 +48,11 @@ const Buscador = props => {
     }
   }
 
-  //listCollections()
+  // listCollections()
 
-
+  useEffect(() => {
+    listCollections()
+  }, [])
 
   return (
     <FrontLayout>
